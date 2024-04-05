@@ -27,11 +27,14 @@ A technical challenge about weird salads
 
 This is a full stack project, far from complete, for a basic inventory management application for a fictional salad restaurant chain. The time limit was supposed to be around 4-5 hours, but I've used the full day. I would gladly spend more time building this out, but I do understand that the aim of the assignment is to prioritise certain parts of the spec, and not expect to complete it.
 
-I'm using Python for the back end, with [FastAPI](https://fastapi.tiangolo.com/) for building out the API endpoints. [SQLModel](https://sqlmodel.tiangolo.com/) paired nicely with it for setting up the database tables and relationships. The database is stored in SQLite.
+**Please note: Everything that was built here so far was built with the aim of getting an MVP in front of a user which could be used to demo or provide some actual value and show an end-to-end flow. It's choc full of shortcuts, incomplete features, insecure data practices, and completely devoid of any form of testing!**
+
+I'm using Python for the back end, with [FastAPI](https://fastapi.tiangolo.com/) for building out the API endpoints. [SQLModel](https://sqlmodel.tiangolo.com/) paired nicely with it for setting up the database tables and relationships. The database is currently SQLite (and this suits the spec where the app only needs to be running on-site).
 
 The frontend uses [NextJS](https://nextjs.org/) 14 to allowing for rapid creation of a single page application with routing and data fetching. I used [MaterialUI](https://mui.com/material-ui/all-components/) just to let me fire components together real quick.
 
 I used [Miro](https://miro.com/) to roughly sketch out the entity relationships - you can see that diagram below.
+
 
 
 ## Project Structure
@@ -74,10 +77,13 @@ python3 -m venv venv
 Active the virtual environment 
 
 ```bash
+
 # OSX
 source venv\Scripts\activate
+
 # Windows
 venv\Scripts\activate
+
 ```
 
 
@@ -103,6 +109,8 @@ To initially populate the database from the data provided with the assignment yo
 This imports data from the CSV files under `api/data` and stores it. Once there's data in the database you should be able to hit the other GET endpoints listed in the Swagger docs and see your data. The available endpoints are as far as I got with the API side of this assignment before I decided that I should build a basic front-end, so that we would at least have a full end-to-end flow.
 
 ![Seeding the database](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/Seeding.png)
+
+Alternatively you could play around with this in [Postman](https://www.postman.com/downloads/), but FastAPI has Swagger built in by default, which is super handy.
 
 ### Front end
 
@@ -140,7 +148,23 @@ npm start
 
 ## Usage
 
+With the API and the Client both running, you should be able to [navigate to the React app](http://localhost:3000/) on your localhost.
 
+![Login page](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/login.png)
+
+We don't have real authentication working here, I'll go into detail on that later in the docs, but if your database has been seeded it will have generated fake email addresses for each of the staff members, firstname.lastname@weirdsalads.com, and assigned them all a password of 1111. You can use the one hinted on the login page, assuming that the seeding has correctly populated the database.
+
+When you log in, we just pass the email and password to the API. Passwords are not encrypted (gaping security hole), and if there's a match the API will return the entire Staff object in a blob of JSON (another GAPING security hole!). That data gets stored in sessionStorage in the FE, where it's then used as a pseudo "authorised" state. If there's a user saved in sessionStorage then you're assumed logged-in, and can access all of the things. In fact you could just manually add anything to sessionStorage under the 'staff' key and you'll get in.
+
+Once logged in you'll see a Dashboard with some nav icons in the footer. I'd love to have had time to visually design all of this properly, but for now I just fired it together with MaterialUI
+
+![dashboard](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/dashboard.png)
+
+You can navigate around and log out afterwards.
+
+![inventory](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/dashboard.png)
+
+![point of sales](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/pos.png)
 
 ## Design/Development decisions
 
