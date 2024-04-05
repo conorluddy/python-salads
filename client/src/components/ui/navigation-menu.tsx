@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 
 export default function NavigationMenu() {
   const router = useRouter();
+  // const role = JSON.parse(sessionStorage.getItem("staff") ?? "").role;
 
   const handleNavigation = (path: string) => {
     router.push(`/${path}`);
@@ -21,6 +22,8 @@ export default function NavigationMenu() {
     router.push(`/`);
   };
 
+  // TODO: Role based authorization to show/hide menu items, role is currently stored in sessionStorage
+
   return (
     <BottomNavigation showLabels>
       {/* TODO: set active icon */}
@@ -29,11 +32,13 @@ export default function NavigationMenu() {
         icon={<HomeIcon />}
         onClick={() => handleNavigation("dashboard")}
       />
+      {/* TODO:  {role === "Front-of-house" && ( */}
       <BottomNavigationAction
         label="POS"
         icon={<StorefrontIcon />}
         onClick={() => handleNavigation("pos")}
       />
+      {/* )} */}
       <BottomNavigationAction
         label="Deliveries"
         icon={<LocalShippingIcon />}
@@ -44,11 +49,13 @@ export default function NavigationMenu() {
         icon={<WarehouseIcon />}
         onClick={() => handleNavigation("inventory")}
       />
+      {/* TODO:  {role === "Manager" && ( */}
       <BottomNavigationAction
         label="Reports"
         icon={<InsightsIcon />}
         onClick={() => handleNavigation("reports")}
       />
+      {/* )} */}
       <BottomNavigationAction
         label="Settings"
         icon={<SettingsIcon />}
