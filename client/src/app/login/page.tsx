@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { TextField, Button, Typography, Container } from "@mui/material";
 import { API_BASE_URL } from "@/constants";
-import { redirect } from "next/navigation";
 
 const Login = () => {
   const router = useRouter();
@@ -26,7 +25,7 @@ const Login = () => {
         const staff = await response.json(); // Assuming the response body contains the staff data
 
         sessionStorage.setItem("staff", JSON.stringify(staff));
-        router.push("/dashboard");
+        router.push("/");
       } else {
         setError("Invalid email or password");
       }
