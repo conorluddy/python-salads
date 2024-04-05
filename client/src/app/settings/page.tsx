@@ -7,6 +7,7 @@ export default function Settings() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       Settings
+      <small>A place for general settings for our application</small>
       <NavigationMenu />
     </main>
   );

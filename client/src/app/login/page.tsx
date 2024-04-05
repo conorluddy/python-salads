@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { TextField, Button, Typography, Container } from "@mui/material";
+import Image from "next/image";
 import { API_BASE_URL } from "@/constants";
 
 const Login = () => {
@@ -39,37 +40,52 @@ const Login = () => {
     <main className="flex flex-col items-center justify-between p-24 gap-10">
       <Container maxWidth="xs">
         <div>
-          <Typography variant="h4" gutterBottom>
-            Login
-          </Typography>
-          <small>Hint: lorenzo.will@weirdsalads.com | 1111</small>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="Email"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+          <div className="flex flex-col items-center justify-between gap-10 mb-10">
+            <Image
+              src="/shnake.svg"
+              width={100}
+              height={100}
+              alt="Weird Salads"
             />
-            <TextField
-              label="Password"
-              type="password"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {error && (
-              <Typography variant="body2" color="error">
-                {error}
-              </Typography>
-            )}
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Login
-            </Button>
-          </form>
+            <Typography variant="h4" className="uppercase">
+              Weird Salads
+            </Typography>
+
+            <small>Hint: lorenzo.will@weirdsalads.com | 1111</small>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                label="Email"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                label="Password"
+                type="password"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {error && (
+                <Typography variant="body2" color="error">
+                  {error}
+                </Typography>
+              )}
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                className="mt-10"
+              >
+                Login
+              </Button>
+            </form>
+          </div>
         </div>
       </Container>
     </main>

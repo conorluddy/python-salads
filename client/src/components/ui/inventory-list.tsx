@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { API_BASE_URL } from "@/constants";
 
-const IngredientsList = () => {
+const InventoryList = () => {
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
@@ -84,4 +84,4 @@ const IngredientsList = () => {
   );
 };
 
-export default IngredientsList;
+export default InventoryList;
