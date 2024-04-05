@@ -2,7 +2,7 @@ import csv
 from sqlmodel import Session, select
 from constants.config import HARD_CODED_LOCATION_ID, INITIAL_UNITS_IN_STOCK
 from database.lifespan import engine
-from database.tables import Ingredients, Locations, Staff
+from database.tables import Ingredients, Locations, Recipes, RecipesIngredients, Staff
 from utilities.numbers import parse_cost_to_cents
 
 
@@ -80,3 +80,31 @@ def seed_ingredients_from_csv():
 
         session.commit()
         return "Ingredients seeded."
+
+
+def seed_recipes_from_csv():
+    data = read_csv("data/recipes.csv")
+    with Session(engine) as session:
+        for recipe_data in data:
+            # Create/fetch the recipe
+            recipe = session.get(Recipes, recipe_data["recipe_id"])
+            if recipe is None:
+                recipe = Recipes(id=recipe_data["recipe_id"], name=recipe_data["name"])
+                session.add(recipe)
+
+            # Create the relationship
+            ingredient = session.get(Ingredients, recipe_data["ingredient_id"])
+            if ingredient is None:
+                # Handle missing ingredient
+                continue
+
+            # RecipeIngredients instance
+            recipe_ingredient = RecipesIngredients(
+                recipe_id=recipe.id,
+                ingredient_id=ingredient.id,
+                ingredient_quantity=float(recipe_data["quantity"]),
+            )
+            session.add(recipe_ingredient)
+
+        session.commit()
+        return "Recipes seeded."

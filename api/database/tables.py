@@ -25,9 +25,15 @@ class LocationsRecipes(SQLModel, table=True):
 # RecipesIngredients - Joins Recipes and Ingredients
 # with a quantity for the ingredient
 class RecipesIngredients(SQLModel, table=True):
-    recipe_id: int = Field(foreign_key="locations.id", primary_key=True)
-    ingredient_id: int = Field(foreign_key="recipes.id", primary_key=True)
+    recipe_id: int = Field(foreign_key="recipes.id", primary_key=True)
+    ingredient_id: int = Field(foreign_key="ingredients.id", primary_key=True)
     ingredient_quantity: float
+
+
+# DeliveriesIngredients
+class DeliveriesIngredients(SQLModel, table=True):
+    deliveries_id: int = Field(foreign_key="deliveries.id", primary_key=True)
+    ingredients_id: int = Field(foreign_key="ingredients.id", primary_key=True)
 
 
 # Main Tables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,9 +73,9 @@ class Recipes(SQLModel, table=True):
     locations: List["Locations"] = Relationship(
         back_populates="recipes", link_model=LocationsRecipes
     )
-    # ingredients: List["Ingredients"] = Relationship(
-    #     back_populates="recipes", link_model=RecipesIngredients
-    # )
+    ingredients: List["Ingredients"] = Relationship(
+        back_populates="recipes", link_model=RecipesIngredients
+    )
 
 
 # Ingredients
@@ -79,21 +85,15 @@ class Ingredients(SQLModel, table=True):
     unit: UnitOfMeasurement
     cost_per_unit: int
     units_in_stock: float
-    # recipes: List["Recipes"] = Relationship(
-    #     back_populates="ingredients", link_model=RecipesIngredients
-    # )
+    recipes: List["Recipes"] = Relationship(
+        back_populates="ingredients", link_model=RecipesIngredients
+    )
 
 
 # Deliveries
 class Deliveries(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     name: str = Field(index=True)
-
-
-# DeliveriesIngredients
-class DeliveriesIngredients(SQLModel, table=True):
-    deliveries_id: int = Field(foreign_key="locations.id", primary_key=True)
-    ingredients_id: int = Field(foreign_key="ingredients.id", primary_key=True)
 
 
 # Orders
