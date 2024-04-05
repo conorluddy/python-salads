@@ -19,9 +19,14 @@ A technical challenge about weird salads
   - [Usage](#usage)
   - [Git Strategy](#git-strategy)
   - [Design/Development decisions](#designdevelopment-decisions)
-  - [Testing](#testing)
+    - [Python](#python)
+    - [FastAPI](#fastapi)
+    - [SQLite](#sqlite)
+- [NextJS](#nextjs)
   - [Entity Relationships](#entity-relationships)
+  - [Stuff I left out](#stuff-i-left-out)
   - [Future plans](#future-plans)
+  - [Testing](#testing)
 
 ## Overview
 
@@ -174,15 +179,45 @@ I set this repo up with a `main` branch intended as "production" and a `develop`
 
 ## Design/Development decisions
 
+Why I made various tech choices in this repo.
 
+### Python
 
-> Just like with the spreadsheets before, each location has its own data. The application will run on a computer in-store, which could be running any of Windows, macOS or Linux. The app will not be public facing, it should not be shared across locations. Each site has secure Wi-Fi and staff will access the store’s system using a mobile web browser via a local IP address.
+I've wanted to learn and use more Python for a while now, partially because of it's applications in the fields of AI and machine learning, but also to have more server side applicable experience. The job spec for this role also specifies that it involves Python, so it made sense to jump straight in.
 
+### FastAPI
 
+As with Python above, it's part of the stack used in this role so it made sense to try it out. In retrospect I would have been much quicker in throwing something together in Node and Typescript, where I'm quickest and most comfortable, but this was a great learning experience regardless of the outcome.
+
+### SQLite
+
+From the technical spec for this assignment:
+
+> ...each location has its own data. The application will run on a computer in-store, which could be running any of Windows, macOS or Linux. The app will not be public facing, it should not be shared across locations. Each site has secure Wi-Fi and staff will access the store’s system using a mobile web browser via a local IP address.
+
+SQLite is a superbly capable database solution, particularly when we're only dealing with a single server instance for an in-house computer. We could run this whole system on a RaspberryPi and not need to worry about running out of resources. SQLite stores everything in one file, removing any need for additional database servers etc. 
+
+In future when Weird Salads scales up, we would be able to migrate (albiet with some minor transformations), each restaurants data into a larger centralised PostgreSQL or similar system on a cloud provider. 
+
+# NextJS
+
+I only had a couple of hours left to work on a front-end for this application, and Next comes with a ton of functionality out of the box, allowing me to quickly stub out some routes for the MVP version of this app. In the longer term, Next 14 now has server components, which means that you can fetch data from the server rather than the users browser, exposing less detail about your API and allowing your Next application to cache data and generate static pages for data that doesn't change very often. Many of the tables we used in this app contain data that never changes (staff, reciepes etc). Even in a real world application, much of this data would be relatively static for days and weeks at a time. Next can be leveraged in such a way that components and pages using this data can be statically generated, so the database and API doesn't even need to get hit for them. When something *does*  change in the database, you can trigger [Incremental Static Regeneration (ISR)](https://nextjs.org/docs/pages/building-your-application/data-fetching/incremental-static-regeneration) to tell Next to rebuild any static components that need to fetch updated data. 
+
+## Entity Relationships
+
+I found that digging into the spreadsheet data and mapping all of this out in Miro actually ate a large chunk of time too, but it was quite enjoyable, and I'm sure there are errors in it. The lines joining the tables are likely not all correct in terms of the relationship cardinality, one-to-one, one-to-many etc etc.
+
+![Database entity relationship diagram](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/ERD.png)
+
+## Stuff I left out
+
+Let me come back to this one
+
+## Future plans
+
+Let me come back to this one too
 
 ## Testing
 
-## Entity Relationships
-![Database entity relationship diagram](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/ERD.png)
-
-## Future plans
+Testing, as per usual when timelines are super tight, was ommitted. However I'm a big fan of testing and it has saved me and teams I've worked on some serious headaches over the years. 
+You would absolutely want frontend and backend tests on this application if it was in use in a real restaurant. Ideally in a CI/CD pipeline so that new features can be regression tested so that they break as little as possible.
