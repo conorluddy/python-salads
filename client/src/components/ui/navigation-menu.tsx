@@ -13,8 +13,8 @@ export default function NavigationMenu() {
   const router = useRouter();
   // const role = JSON.parse(sessionStorage.getItem("staff") ?? "").role;
 
-  const handleNavigation = (path: string) => {
-    router.push(`/${path}`);
+  const handleNavigation = (path?: string) => {
+    router.push(`/${path ?? ""}`);
   };
 
   const gtfo = () => {
@@ -25,47 +25,49 @@ export default function NavigationMenu() {
   // TODO: Role based authorization to show/hide menu items, role is currently stored in sessionStorage
 
   return (
-    <BottomNavigation showLabels>
-      {/* TODO: set active icon */}
-      <BottomNavigationAction
-        label="Dashboard"
-        icon={<HomeIcon />}
-        onClick={() => handleNavigation("dashboard")}
-      />
-      {/* TODO:  {role === "Front-of-house" && ( */}
-      <BottomNavigationAction
-        label="POS"
-        icon={<StorefrontIcon />}
-        onClick={() => handleNavigation("pos")}
-      />
-      {/* )} */}
-      <BottomNavigationAction
-        label="Deliveries"
-        icon={<LocalShippingIcon />}
-        onClick={() => handleNavigation("deliveries")}
-      />
-      <BottomNavigationAction
-        label="Inventory"
-        icon={<WarehouseIcon />}
-        onClick={() => handleNavigation("inventory")}
-      />
-      {/* TODO:  {role === "Manager" && ( */}
-      <BottomNavigationAction
-        label="Reports"
-        icon={<InsightsIcon />}
-        onClick={() => handleNavigation("reports")}
-      />
-      {/* )} */}
-      <BottomNavigationAction
-        label="Settings"
-        icon={<SettingsIcon />}
-        onClick={() => handleNavigation("settings")}
-      />
-      <BottomNavigationAction
-        label="Log out"
-        icon={<LogoutIcon />}
-        onClick={gtfo}
-      />
-    </BottomNavigation>
+    <div className="fixed bottom-0 w-full justify-center flex">
+      <BottomNavigation showLabels>
+        {/* TODO: set active icon */}
+        <BottomNavigationAction
+          label="Dashboard"
+          icon={<HomeIcon />}
+          onClick={() => handleNavigation()}
+        />
+        {/* TODO:  {role === "Front-of-house" && ( */}
+        <BottomNavigationAction
+          label="POS"
+          icon={<StorefrontIcon />}
+          onClick={() => handleNavigation("pos")}
+        />
+        {/* )} */}
+        <BottomNavigationAction
+          label="Deliveries"
+          icon={<LocalShippingIcon />}
+          onClick={() => handleNavigation("deliveries")}
+        />
+        <BottomNavigationAction
+          label="Inventory"
+          icon={<WarehouseIcon />}
+          onClick={() => handleNavigation("inventory")}
+        />
+        {/* TODO:  {role === "Manager" && ( */}
+        <BottomNavigationAction
+          label="Reports"
+          icon={<InsightsIcon />}
+          onClick={() => handleNavigation("reports")}
+        />
+        {/* )} */}
+        <BottomNavigationAction
+          label="Settings"
+          icon={<SettingsIcon />}
+          onClick={() => handleNavigation("settings")}
+        />
+        <BottomNavigationAction
+          label="Log out"
+          icon={<LogoutIcon />}
+          onClick={gtfo}
+        />
+      </BottomNavigation>
+    </div>
   );
 }

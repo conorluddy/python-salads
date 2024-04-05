@@ -8,6 +8,7 @@ export default function Inventory() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       Inventory
+      <small>Ideally we could use this route for stock management</small>
       <IngredientsList />
       <NavigationMenu />
     </main>

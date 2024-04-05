@@ -7,6 +7,11 @@ export default function Deliveries() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       Deliveries
+      <small>
+        Incoming deliveries would be managed in here, posting stock updates to
+        our delivery tables and tracking which member of staff accepted the
+        delivery
+      </small>
       <NavigationMenu />
     </main>
   );
