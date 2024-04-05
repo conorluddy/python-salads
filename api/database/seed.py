@@ -1,4 +1,5 @@
 import csv
+import re
 from sqlmodel import Session, select
 from constants.config import HARD_CODED_LOCATION_ID, INITIAL_UNITS_IN_STOCK
 from database.lifespan import engine
@@ -54,6 +55,10 @@ def seed_staff_from_csv():
             return "Please seed the Locations table first"
         for staff_data in staff_of_this_location:
             staff_data["id"] = staff_data.pop("staff_id")
+            staff_data["email"] = (
+                re.sub(r"\s+", ".", re.sub(r"[^\w\s]", "", staff_data["name"])).lower()
+                + "@weirdsalads.com"
+            )
             staff = Staff(**staff_data)
             session.add(staff)
 
