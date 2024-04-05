@@ -17,6 +17,7 @@ A technical challenge about weird salads
       - [Run in development](#run-in-development)
       - [Run in production](#run-in-production)
   - [Usage](#usage)
+    - [On-site](#on-site)
   - [Git Strategy](#git-strategy)
   - [Design/Development decisions](#designdevelopment-decisions)
     - [Python](#python)
@@ -25,7 +26,11 @@ A technical challenge about weird salads
 - [NextJS](#nextjs)
   - [Entity Relationships](#entity-relationships)
   - [Stuff I left out](#stuff-i-left-out)
+  - [Other technical pitfalls](#other-technical-pitfalls)
+    - [Dates, times and timezones](#dates-times-and-timezones)
   - [Future plans](#future-plans)
+    - [PWA - Progressive Web App](#pwa---progressive-web-app)
+    - [Storing customer data](#storing-customer-data)
   - [Testing](#testing)
 
 ## Overview
@@ -171,6 +176,9 @@ You can navigate around and log out afterwards.
 
 ![point of sales](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/pos.png)
 
+### On-site
+
+In a production environment when setting this up on-site for an actual branch of Weird Salads, we would need to un hard-code the Location ID. We could have a CLI tool for the initial setup, or manage it via an initial setup flow in the React app, where the installation engineer would set the correct LocationID in a .env file or path variable, or even just in the database by seeding it with a specific LocationID.
 
 ## Git Strategy
 
@@ -207,15 +215,35 @@ I only had a couple of hours left to work on a front-end for this application, a
 
 I found that digging into the spreadsheet data and mapping all of this out in Miro actually ate a large chunk of time too, but it was quite enjoyable, and I'm sure there are errors in it. The lines joining the tables are likely not all correct in terms of the relationship cardinality, one-to-one, one-to-many etc etc.
 
+I had intended that most of the data that gets seeded, never changes, so those tables are regarded as "static", wheras the stock levels and the tracking of who-changed-what would be changing constantly. Ideally we would be writing to those Orders, Deliveries and Stock Adjustments tables actively, and changes to them would trigger updates to the units_in_stock column of the Ingredients table.
+
+When it came to generating reports we would be able to deduct from these table entries, exactly why, when and by whom the stock levels changed. 
+
 ![Database entity relationship diagram](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/ERD.png)
 
 ## Stuff I left out
 
-Let me come back to this one
+Let me come back to this one, it's a big one...
+
+
+
+## Other technical pitfalls
+
+### Dates, times and timezones
+
+Dates are hard. The data for the Weird Salads restaurant locations have postcodes across the USA. When this app does need to scale up and centralise all of their data, it will need to take into account that different locations will open and close at different times. Additionally, if some of them open into the night, or maybe open at 8pm and close at 4am, then it can introduce all sorts of complications when dealing with generating reports or managing stock.
 
 ## Future plans
 
-Let me come back to this one too
+Things that would be nice to add to this
+
+### PWA - Progressive Web App
+
+We could set the frontend up as a PWA so that it can be installed as an "app" on the devices in the restaurant. This appears to require a HTTPS cert for the server though, so goes a bit beyond what we have here with just serving the app from an in store IP address. But it would be a nice feature because it makes the frontend look like a native application, and gives you an app icon on your device.
+
+### Storing customer data
+
+We could take the customers name and phone or email when they're ordering, so that we can build up a database of customers to be used for marketing/discounts/etc. 
 
 ## Testing
 
