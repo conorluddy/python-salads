@@ -1,0 +1,14 @@
+# Python
+*.pyc
+__pycache__/
+venv/
+*.env
+
+# IDEs and editors
+.vscode/
+
+# Dependency directories
+env/
+lib/
+libs/
+node_modules/
