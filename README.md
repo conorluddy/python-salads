@@ -150,7 +150,7 @@ npm start
 
 With the API and the Client both running, you should be able to [navigate to the React app](http://localhost:3000/) on your localhost.
 
-![Login page](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/login.png)
+![Login page](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/login.png)
 
 We don't have real authentication working here, I'll go into detail on that later in the docs, but if your database has been seeded it will have generated fake email addresses for each of the staff members, firstname.lastname@weirdsalads.com, and assigned them all a password of 1111. You can use the one hinted on the login page, assuming that the seeding has correctly populated the database.
 
@@ -158,13 +158,13 @@ When you log in, we just pass the email and password to the API. Passwords are n
 
 Once logged in you'll see a Dashboard with some nav icons in the footer. I'd love to have had time to visually design all of this properly, but for now I just fired it together with MaterialUI
 
-![dashboard](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/dashboard.png)
+![dashboard](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/dashboard.png)
 
 You can navigate around and log out afterwards.
 
-![inventory](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/dashboard.png)
+![inventory](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/inventory.png)
 
-![point of sales](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/pos.png)
+![point of sales](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/pos.png)
 
 ## Design/Development decisions
 
@@ -175,6 +175,6 @@ You can navigate around and log out afterwards.
 ## Testing
 
 ## Entity Relationships
-![Database entity relationship diagram](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/ERD.png)
+![Database entity relationship diagram](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/ERD.png)
 
 ## Future plans
