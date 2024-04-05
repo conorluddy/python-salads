@@ -5,7 +5,7 @@ from models.roles import Role
 from models.units import UnitOfMeasurement
 
 
-# Junction/Link Tables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Junction/Link Tables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 # LocationsStaff
@@ -40,7 +40,7 @@ class Locations(SQLModel, table=True):
     staff: List["Staff"] = Relationship(
         back_populates="locations", link_model=LocationsStaff
     )
-    recipes: "Recipes" = Relationship(
+    recipes: List["Recipes"] = Relationship(
         back_populates="locations", link_model=LocationsRecipes
     )
 
@@ -65,9 +65,9 @@ class Recipes(SQLModel, table=True):
     locations: List["Locations"] = Relationship(
         back_populates="recipes", link_model=LocationsRecipes
     )
-    ingredients: List["Ingredients"] = Relationship(
-        back_populates="recipes", link_model=RecipesIngredients
-    )
+    # ingredients: List["Ingredients"] = Relationship(
+    #     back_populates="recipes", link_model=RecipesIngredients
+    # )
 
 
 # Ingredients
@@ -77,9 +77,9 @@ class Ingredients(SQLModel, table=True):
     unit: UnitOfMeasurement
     cost_per_unit: int
     units_in_stock: float
-    recipes: List["Recipes"] = Relationship(
-        back_populates="ingredients", link_model=RecipesIngredients
-    )
+    # recipes: List["Recipes"] = Relationship(
+    #     back_populates="ingredients", link_model=RecipesIngredients
+    # )
 
 
 # Deliveries
