@@ -12,7 +12,9 @@ from routes.auth import auth_router
 
 
 # API Server-  Run with `uvicorn main:app --reload`
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan, debug=True
+)  # TODO: Remove debug=True before deployment
 
 # Allow CORS
 app.add_middleware(
