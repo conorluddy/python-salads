@@ -13,9 +13,9 @@ from routes.staff import staff_router
 app = FastAPI(lifespan=lifespan)
 
 # Routers - TODO: Move these to a separate location/function
-app.include_router(ingredients_router, prefix="/ingredients")
-app.include_router(locations_router, prefix="/locations")
-app.include_router(menus_router, prefix="/menus")
-app.include_router(recipes_router, prefix="/recipes")
-app.include_router(staff_router, prefix="/staff")
-app.include_router(seed_router, prefix="/seed")
+app.include_router(locations_router, prefix="/locations", tags=["Locations"])
+app.include_router(staff_router, prefix="/staff", tags=["Staff"])
+app.include_router(menus_router, prefix="/menus", tags=["Menus"])
+app.include_router(recipes_router, prefix="/recipes", tags=["Recipes"])
+app.include_router(ingredients_router, prefix="/ingredients", tags=["Ingredients"])
+app.include_router(seed_router, prefix="/seed", tags=["Database Seeding"])
