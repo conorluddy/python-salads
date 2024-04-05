@@ -1,6 +1,6 @@
 from typing import List
 from sqlmodel import Field, Relationship, SQLModel
-from models.roles import Role
+from constants.config import DEFAULT_PASSWORD
 from models.units import UnitOfMeasurement
 
 
@@ -22,10 +22,12 @@ class LocationsRecipes(SQLModel, table=True):
     allow_modifiers: bool
 
 
+# RecipesIngredients - Joins Recipes and Ingredients
+# with a quantity for the ingredient
 class RecipesIngredients(SQLModel, table=True):
     recipe_id: int = Field(foreign_key="locations.id", primary_key=True)
     ingredient_id: int = Field(foreign_key="recipes.id", primary_key=True)
-    quantity: float
+    ingredient_quantity: float
 
 
 # Main Tables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -51,7 +53,8 @@ class Staff(SQLModel, table=True):
     dob: str
     iban: str
     bic: str
-    role: Role
+    password: str = DEFAULT_PASSWORD
+    role: str  # TODO: Use the role enum here
     locations: List["Locations"] = Relationship(
         back_populates="staff", link_model=LocationsStaff
     )

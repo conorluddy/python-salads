@@ -1,5 +1,8 @@
-from typing import Literal
+from enum import Enum
 
 
-# Type check for incoming roles
-Role = Literal["Back-of-house", "Front-of-house", "Chef", "Manager"]
+class Role(Enum):
+    BOH = "Back-of-house"
+    CHEF = "Chef"
+    FOH = "Front-of-house"
+    MANAGER = "Manager"
