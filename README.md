@@ -12,7 +12,6 @@ A technical challenge about weird salads
   - [Installation](#installation)
     - [Prerequisites](#prerequisites)
     - [Installation and locel development steps](#installation-and-locel-development-steps)
-    - [Back end](#back-end)
     - [Front end](#front-end)
   - [Usage](#usage)
   - [Git Strategy](#git-strategy)
@@ -22,7 +21,7 @@ A technical challenge about weird salads
 
 ## Overview
 
-This is a full stack project, far from complete, for a basic inventory management application for a fictional salad restaurant chain. The time limit was supposed to be around 4-5 hours, but I've used the full day.
+This is a full stack project, far from complete, for a basic inventory management application for a fictional salad restaurant chain. The time limit was supposed to be around 4-5 hours, but I've used the full day. I would gladly spend more time building this out, but I do understand that the aim of the assignment is to prioritise certain parts of the spec, and not expect to complete it.
 
 I'm using Python for the back end, with [FastAPI](https://fastapi.tiangolo.com/) for building out the API endpoints. [SQLModel](https://sqlmodel.tiangolo.com/) paired nicely with it for setting up the database tables and relationships. The database is stored in SQLite.
 
@@ -46,14 +45,14 @@ Everything for the frontend is under the [/client](https://github.com/conorluddy
 
 **Clone the Repository**
 
-Clone the project repository from GitHub to your local machine.
+Clone the project repository from GitHub to your local machine:
 
 ```bash
 git clone https://github.com/conorluddy/python-salads
 ```
 
 
-### Back end
+**Back end**
 
 CD into the directory for the API part of the application *(Not the project root)*
 
@@ -84,10 +83,23 @@ Install the dependencies
 pip install -r requirements.txt
 ```
 
-Run the server
+Run the server with the following command, it will create any database tables that don't already exist, so you may need to scroll back up to see the served URL, but it should be up and running on `http://127.0.0.1:8000`
+
 ```bash
 uvicorn main:app --reload
 ```
+
+https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/api-install.mp4
+
+**Seeding the database**
+
+Once the API being served, you can check out the [Swagger docs for the available endpoints](http://127.0.0.1:8000/docs) here.
+
+To initially populate the database from the data provided with the assignment you'll need to POST to the seed endpoint, you can [trigger that via the swagger docs here](http://127.0.0.1:8000/docs#/Database%20Seeding/seed_all_seed__post)
+
+This imports data from the CSV files under `api/data` and stores it. Once there's data in the database you should be able to hit the other GET endpoints listed in the Swagger docs and see your data. The available endpoints are as far as I got with the API side of this assignment before I decided that I should build a basic front-end, so that we would at least have a full end-to-end flow.
+
+![Seeding the database](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/Seeding.png)
 
 ### Front end
 
