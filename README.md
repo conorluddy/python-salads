@@ -17,11 +17,16 @@ A technical challenge about weird salads
       - [Run in development](#run-in-development)
       - [Run in production](#run-in-production)
   - [Usage](#usage)
-  - [Design/Development decisions](#designdevelopment-decisions)
   - [Git Strategy](#git-strategy)
-  - [Testing](#testing)
+  - [Design/Development decisions](#designdevelopment-decisions)
+    - [Python](#python)
+    - [FastAPI](#fastapi)
+    - [SQLite](#sqlite)
+- [NextJS](#nextjs)
   - [Entity Relationships](#entity-relationships)
+  - [Stuff I left out](#stuff-i-left-out)
   - [Future plans](#future-plans)
+  - [Testing](#testing)
 
 ## Overview
 
@@ -150,7 +155,7 @@ npm start
 
 With the API and the Client both running, you should be able to [navigate to the React app](http://localhost:3000/) on your localhost.
 
-![Login page](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/login.png)
+![Login page](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/login.png)
 
 We don't have real authentication working here, I'll go into detail on that later in the docs, but if your database has been seeded it will have generated fake email addresses for each of the staff members, firstname.lastname@weirdsalads.com, and assigned them all a password of 1111. You can use the one hinted on the login page, assuming that the seeding has correctly populated the database.
 
@@ -158,23 +163,61 @@ When you log in, we just pass the email and password to the API. Passwords are n
 
 Once logged in you'll see a Dashboard with some nav icons in the footer. I'd love to have had time to visually design all of this properly, but for now I just fired it together with MaterialUI
 
-![dashboard](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/dashboard.png)
+![dashboard](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/dashboard.png)
 
 You can navigate around and log out afterwards.
 
-![inventory](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/dashboard.png)
+![inventory](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/inventory.png)
 
-![point of sales](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/pos.png)
+![point of sales](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/pos.png)
 
-## Design/Development decisions
-
-> Just like with the spreadsheets before, each location has its own data. The application will run on a computer in-store, which could be running any of Windows, macOS or Linux. The app will not be public facing, it should not be shared across locations. Each site has secure Wi-Fi and staff will access the store’s system using a mobile web browser via a local IP address.
 
 ## Git Strategy
 
-## Testing
+I set this repo up with a `main` branch intended as "production" and a `develop` branch as a primary branch to build features against. Feature branches are opened as PRs against `develop`, and `develop` would be merged into `main` whenever a fresh release to prod is ready to go. This works well on teams, where the feature branches are peer reviewed and need an approval before being merged into the primary branch. I was working fast and loose on this, but normally in a professional setting you would want to have PR templates to fill out details of what each PR contains. You would also want to set up a CI/CD pipeline with Github actions or Jenkins or similar, checking that tests pass before allowing anything to be merged to the core branches. Merges to `develop` or `main` would kick off a deployment build and push the built code out to the cloud. Feature branches and/or PRs can also be set up to provide preview environments for QA and end to end testing. AWS Amplify and Vercel are some nice examples of services that provide this kind of branch integration.
+
+
+## Design/Development decisions
+
+Why I made various tech choices in this repo.
+
+### Python
+
+I've wanted to learn and use more Python for a while now, partially because of it's applications in the fields of AI and machine learning, but also to have more server side applicable experience. The job spec for this role also specifies that it involves Python, so it made sense to jump straight in.
+
+### FastAPI
+
+As with Python above, it's part of the stack used in this role so it made sense to try it out. In retrospect I would have been much quicker in throwing something together in Node and Typescript, where I'm quickest and most comfortable, but this was a great learning experience regardless of the outcome.
+
+### SQLite
+
+From the technical spec for this assignment:
+
+> ...each location has its own data. The application will run on a computer in-store, which could be running any of Windows, macOS or Linux. The app will not be public facing, it should not be shared across locations. Each site has secure Wi-Fi and staff will access the store’s system using a mobile web browser via a local IP address.
+
+SQLite is a superbly capable database solution, particularly when we're only dealing with a single server instance for an in-house computer. We could run this whole system on a RaspberryPi and not need to worry about running out of resources. SQLite stores everything in one file, removing any need for additional database servers etc. 
+
+In future when Weird Salads scales up, we would be able to migrate (albiet with some minor transformations), each restaurants data into a larger centralised PostgreSQL or similar system on a cloud provider. 
+
+# NextJS
+
+I only had a couple of hours left to work on a front-end for this application, and Next comes with a ton of functionality out of the box, allowing me to quickly stub out some routes for the MVP version of this app. In the longer term, Next 14 now has server components, which means that you can fetch data from the server rather than the users browser, exposing less detail about your API and allowing your Next application to cache data and generate static pages for data that doesn't change very often. Many of the tables we used in this app contain data that never changes (staff, reciepes etc). Even in a real world application, much of this data would be relatively static for days and weeks at a time. Next can be leveraged in such a way that components and pages using this data can be statically generated, so the database and API doesn't even need to get hit for them. When something *does*  change in the database, you can trigger [Incremental Static Regeneration (ISR)](https://nextjs.org/docs/pages/building-your-application/data-fetching/incremental-static-regeneration) to tell Next to rebuild any static components that need to fetch updated data. 
 
 ## Entity Relationships
-![Database entity relationship diagram](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/ERD.png)
+
+I found that digging into the spreadsheet data and mapping all of this out in Miro actually ate a large chunk of time too, but it was quite enjoyable, and I'm sure there are errors in it. The lines joining the tables are likely not all correct in terms of the relationship cardinality, one-to-one, one-to-many etc etc.
+
+![Database entity relationship diagram](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/ERD.png)
+
+## Stuff I left out
+
+Let me come back to this one
 
 ## Future plans
+
+Let me come back to this one too
+
+## Testing
+
+Testing, as per usual when timelines are super tight, was ommitted. However I'm a big fan of testing and it has saved me and teams I've worked on some serious headaches over the years. 
+You would absolutely want frontend and backend tests on this application if it was in use in a real restaurant. Ideally in a CI/CD pipeline so that new features can be regression tested so that they break as little as possible.
