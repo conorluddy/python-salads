@@ -11,9 +11,13 @@ A technical challenge about weird salads
   - [Project Structure](#project-structure)
   - [Installation](#installation)
     - [Prerequisites](#prerequisites)
-    - [Installation and locel development steps](#installation-and-locel-development-steps)
+    - [Installation and local development](#installation-and-local-development)
     - [Front end](#front-end)
+      - [Install dependencies](#install-dependencies)
+      - [Run in development](#run-in-development)
+      - [Run in production](#run-in-production)
   - [Usage](#usage)
+  - [Design/Development decisions](#designdevelopment-decisions)
   - [Git Strategy](#git-strategy)
   - [Testing](#testing)
   - [Entity Relationships](#entity-relationships)
@@ -29,6 +33,7 @@ The frontend uses [NextJS](https://nextjs.org/) 14 to allowing for rapid creatio
 
 I used [Miro](https://miro.com/) to roughly sketch out the entity relationships - you can see that diagram below.
 
+
 ## Project Structure
 
 Everything for the backend is under the [/api](https://github.com/conorluddy/python-salads/tree/develop/api) directory
@@ -41,7 +46,7 @@ Everything for the frontend is under the [/client](https://github.com/conorluddy
 - **Python**: Ensure Python is installed on the system. It’s recommended to use the latest version unless the project specifies otherwise. You can download Python from [python.org](https://www.python.org/).
 - **pip**: Ensure pip (Python package installer) is installed. It usually comes with Python.
 
-### Installation and locel development steps
+### Installation and local development 
 
 **Clone the Repository**
 
@@ -68,15 +73,13 @@ python3 -m venv venv
 
 Active the virtual environment 
 
-OSX
 ```bash
+# OSX
 source venv\Scripts\activate
-```
-
-Windows
-```bash
+# Windows
 venv\Scripts\activate
 ```
+
 
 Install the dependencies
 ```bash
@@ -99,27 +102,49 @@ To initially populate the database from the data provided with the assignment yo
 
 This imports data from the CSV files under `api/data` and stores it. Once there's data in the database you should be able to hit the other GET endpoints listed in the Swagger docs and see your data. The available endpoints are as far as I got with the API side of this assignment before I decided that I should build a basic front-end, so that we would at least have a full end-to-end flow.
 
-![Seeding the database](https://github.com/conorluddy/python-salads/blob/documentation/documentation/assets/Seeding.png)
+![Seeding the database](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/Seeding.png)
 
 ### Front end
 
-CD into the /client directory
+CD into the /client directory (in a separate terminal, so we can run this in parallel to the API)
+
 ```bash
 cd python-salads/client
 ```
 
-Install dependencies
+#### Install dependencies
+
 ```bash
 npm install
 ```
 
-Run it!
+#### Run in development
+
 ```bash
 npm run dev
 ```
 
+#### Run in production
+
+First we need to `build` it
+
+```bash
+npm run build
+```
+
+Then we can `start` it.
+
+```bash
+npm start
+```
 
 ## Usage
+
+
+
+## Design/Development decisions
+
+> Just like with the spreadsheets before, each location has its own data. The application will run on a computer in-store, which could be running any of Windows, macOS or Linux. The app will not be public facing, it should not be shared across locations. Each site has secure Wi-Fi and staff will access the store’s system using a mobile web browser via a local IP address.
 
 ## Git Strategy
 
