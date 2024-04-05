@@ -17,8 +17,8 @@ A technical challenge about weird salads
       - [Run in development](#run-in-development)
       - [Run in production](#run-in-production)
   - [Usage](#usage)
-  - [Design/Development decisions](#designdevelopment-decisions)
   - [Git Strategy](#git-strategy)
+  - [Design/Development decisions](#designdevelopment-decisions)
   - [Testing](#testing)
   - [Entity Relationships](#entity-relationships)
   - [Future plans](#future-plans)
@@ -166,11 +166,19 @@ You can navigate around and log out afterwards.
 
 ![point of sales](https://github.com/conorluddy/python-salads/blob/develop/documentation/assets/pos.png)
 
+
+## Git Strategy
+
+I set this repo up with a `main` branch intended as "production" and a `develop` branch as a primary branch to build features against. Feature branches are opened as PRs against `develop`, and `develop` would be merged into `main` whenever a fresh release to prod is ready to go. This works well on teams, where the feature branches are peer reviewed and need an approval before being merged into the primary branch. I was working fast and loose on this, but normally in a professional setting you would want to have PR templates to fill out details of what each PR contains. You would also want to set up a CI/CD pipeline with Github actions or Jenkins or similar, checking that tests pass before allowing anything to be merged to the core branches. Merges to `develop` or `main` would kick off a deployment build and push the built code out to the cloud. Feature branches and/or PRs can also be set up to provide preview environments for QA and end to end testing. AWS Amplify and Vercel are some nice examples of services that provide this kind of branch integration.
+
+
 ## Design/Development decisions
+
+
 
 > Just like with the spreadsheets before, each location has its own data. The application will run on a computer in-store, which could be running any of Windows, macOS or Linux. The app will not be public facing, it should not be shared across locations. Each site has secure Wi-Fi and staff will access the store’s system using a mobile web browser via a local IP address.
 
-## Git Strategy
+
 
 ## Testing
 
