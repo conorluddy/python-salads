@@ -36,11 +36,11 @@ const InventoryList = () => {
     fetchIngredients();
   }, []);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (event: any, newPage: React.SetStateAction<number>) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: { target: { value: string | number; }; }) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
