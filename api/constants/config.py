@@ -1,0 +1,9 @@
+SQLITE_PATH = "database/weirdsalads.db"
+SQLITE_URL = f"sqlite:///{SQLITE_PATH}"
+DEFAULT_PASSWORD = 1111
+INITIAL_UNITS_IN_STOCK = 1000
+ALLOWED_CORS_ORIGINS = ["http://localhost:3000"]
+
+
+# Not ideal :)
+HARD_CODED_LOCATION_ID = 1
