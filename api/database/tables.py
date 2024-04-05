@@ -1,11 +1,10 @@
 from typing import List
 from sqlmodel import Field, Relationship, SQLModel
-
-from models.roles import Role
+from constants.config import DEFAULT_PASSWORD
 from models.units import UnitOfMeasurement
 
 
-# Junction/Link Tables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Junction/Link Tables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 # LocationsStaff
@@ -18,15 +17,23 @@ class LocationsStaff(SQLModel, table=True):
 class LocationsRecipes(SQLModel, table=True):
     location_id: int = Field(foreign_key="locations.id", primary_key=True)
     recipe_id: int = Field(foreign_key="recipes.id", primary_key=True)
-    price: int
+    price: int  # I'm converting all monetary values to a cent based integer
     allow_allergens: bool
     allow_modifiers: bool
 
 
+# RecipesIngredients - Joins Recipes and Ingredients
+# with a quantity for the ingredient
 class RecipesIngredients(SQLModel, table=True):
-    recipe_id: int = Field(foreign_key="locations.id", primary_key=True)
-    ingredient_id: int = Field(foreign_key="recipes.id", primary_key=True)
-    quantity: float
+    recipe_id: int = Field(foreign_key="recipes.id", primary_key=True)
+    ingredient_id: int = Field(foreign_key="ingredients.id", primary_key=True)
+    ingredient_quantity: float
+
+
+# DeliveriesIngredients
+class DeliveriesIngredients(SQLModel, table=True):
+    deliveries_id: int = Field(foreign_key="deliveries.id", primary_key=True)
+    ingredients_id: int = Field(foreign_key="ingredients.id", primary_key=True)
 
 
 # Main Tables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,7 +47,7 @@ class Locations(SQLModel, table=True):
     staff: List["Staff"] = Relationship(
         back_populates="locations", link_model=LocationsStaff
     )
-    recipes: "Recipes" = Relationship(
+    recipes: List["Recipes"] = Relationship(
         back_populates="locations", link_model=LocationsRecipes
     )
 
@@ -52,7 +59,8 @@ class Staff(SQLModel, table=True):
     dob: str
     iban: str
     bic: str
-    role: Role
+    password: str = DEFAULT_PASSWORD
+    role: str  # TODO: Use the role enum here
     locations: List["Locations"] = Relationship(
         back_populates="staff", link_model=LocationsStaff
     )
@@ -75,7 +83,7 @@ class Ingredients(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
     unit: UnitOfMeasurement
-    cost_per_unit: int
+    cost_per_unit: int  # I'm converting all monetary values to a cent based int
     units_in_stock: float
     recipes: List["Recipes"] = Relationship(
         back_populates="ingredients", link_model=RecipesIngredients
@@ -86,12 +94,6 @@ class Ingredients(SQLModel, table=True):
 class Deliveries(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     name: str = Field(index=True)
-
-
-# DeliveriesIngredients
-class DeliveriesIngredients(SQLModel, table=True):
-    deliveries_id: int = Field(foreign_key="locations.id", primary_key=True)
-    ingredients_id: int = Field(foreign_key="ingredients.id", primary_key=True)
 
 
 # Orders
