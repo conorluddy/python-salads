@@ -1,6 +1,5 @@
 from typing import List
 from sqlmodel import Field, Relationship, SQLModel
-
 from models.roles import Role
 from models.units import UnitOfMeasurement
 

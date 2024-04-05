@@ -1,8 +1,9 @@
-from enum import Enum
+from typing import Literal
 
 
-class UnitOfMeasurement(Enum):
-    CENTILITER = "centiliter"
-    DECILITER = "deciliter"
-    LITER = "liter"
-    MILLILITER = "milliliter"
+UnitOfMeasurement = Literal[
+    "centiliter",
+    "deciliter",
+    "liter",
+    "milliliter",
+]
