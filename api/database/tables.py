@@ -59,9 +59,7 @@ class Staff(SQLModel, table=True):
     dob: str
     iban: str
     bic: str
-
-    # TODO: generate an email from their name, for login
-
+    email: str
     password: str = DEFAULT_PASSWORD
     role: str  # TODO: Use the role enum here
     locations: List["Locations"] = Relationship(
