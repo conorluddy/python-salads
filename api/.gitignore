@@ -13,4 +13,4 @@ lib/
 libs/
 
 # Our SQLite Database
-database/weirdsalads.db
+weirdsalads.db
