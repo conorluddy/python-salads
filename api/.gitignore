@@ -11,7 +11,6 @@ venv/
 env/
 lib/
 libs/
-node_modules/
 
 # Our SQLite Database
 database/weirdsalads.db
