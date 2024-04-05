@@ -1,5 +1,9 @@
 from fastapi import FastAPI
-from database.seed import seed_locations_from_csv, seed_staff_from_csv
+from database.seed import (
+    seed_ingredients_from_csv,
+    seed_locations_from_csv,
+    seed_staff_from_csv,
+)
 from database.lifespan import lifespan
 
 
@@ -21,3 +25,8 @@ def seed_locations():
 @app.post("/seed/staff")
 def seed_staff():
     seed_staff_from_csv()
+
+
+@app.post("/seed/ingredients")
+def seed_ingredients():
+    seed_ingredients_from_csv()

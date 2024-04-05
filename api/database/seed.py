@@ -1,8 +1,9 @@
 import csv
 from sqlmodel import Session, select
-from constants.config import HARD_CODED_LOCATION_ID
+from constants.config import HARD_CODED_LOCATION_ID, INITIAL_UNITS_IN_STOCK
 from database.lifespan import engine
-from database.tables import Locations, Staff
+from database.tables import Ingredients, Locations, Staff
+from utilities.numbers import parse_cost_to_cents
 
 
 def read_csv(file_path):
@@ -24,7 +25,7 @@ def seed_locations_from_csv():
             location = Locations(**location_data)
             session.add(location)
         session.commit()
-        return "Locations seeded."
+        return "Locations seeded."  # TODO: Return the number of locations seeded
 
 
 def seed_staff_from_csv():
@@ -50,4 +51,32 @@ def seed_staff_from_csv():
             session.add(staff)
 
         session.commit()
-        return "Staff seeded."
+        return "Staff seeded."  # TODO: give more info on the number of staff seeded
+
+
+def seed_ingredients_from_csv():
+    data = read_csv("data/ingredients.csv")
+
+    with Session(engine) as session:
+        has_been_seeded = bool(session.exec(select(Ingredients)).first())
+
+        if has_been_seeded:
+            return "The ingredients have already been seeded. Pun intended."
+
+        for ingredient_data in data:
+            ingredient_data["id"] = ingredient_data.pop("ingredient_id")
+
+            # We're setting the initial stock level here.
+            # We could set it as zero and wait for a delivery, but will use 1000 for now
+            ingredient_data["units_in_stock"] = INITIAL_UNITS_IN_STOCK
+
+            # I'm converting the cost to cents here, similar to how Stripe
+            # use cent based numbers rather than floating point
+            cost_string = ingredient_data.pop("cost")
+            ingredient_data["cost_per_unit"] = parse_cost_to_cents(cost_string)
+
+            ingredient = Ingredients(**ingredient_data)
+            session.add(ingredient)
+
+        session.commit()
+        return "Ingredients seeded."
