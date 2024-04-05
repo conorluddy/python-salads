@@ -12,3 +12,6 @@ env/
 lib/
 libs/
 node_modules/
+
+# Our SQLite Database
+./api/database/weirdsalads.db
