@@ -17,7 +17,7 @@ class LocationsStaff(SQLModel, table=True):
 class LocationsRecipes(SQLModel, table=True):
     location_id: int = Field(foreign_key="locations.id", primary_key=True)
     recipe_id: int = Field(foreign_key="recipes.id", primary_key=True)
-    price: int
+    price: int  # I'm converting all monetary values to a cent based integer
     allow_allergens: bool
     allow_modifiers: bool
 
@@ -83,7 +83,7 @@ class Ingredients(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
     unit: UnitOfMeasurement
-    cost_per_unit: int
+    cost_per_unit: int  # I'm converting all monetary values to a cent based int
     units_in_stock: float
     recipes: List["Recipes"] = Relationship(
         back_populates="ingredients", link_model=RecipesIngredients

@@ -2,7 +2,14 @@ import csv
 from sqlmodel import Session, select
 from constants.config import HARD_CODED_LOCATION_ID, INITIAL_UNITS_IN_STOCK
 from database.lifespan import engine
-from database.tables import Ingredients, Locations, Recipes, RecipesIngredients, Staff
+from database.tables import (
+    Ingredients,
+    Locations,
+    LocationsRecipes,
+    Recipes,
+    RecipesIngredients,
+    Staff,
+)
 from utilities.numbers import parse_cost_to_cents
 
 
@@ -108,3 +115,43 @@ def seed_recipes_from_csv():
 
         session.commit()
         return "Recipes seeded."
+
+
+def seed_menus_from_csv():
+    data = read_csv("data/menus.csv")
+    with Session(engine) as session:
+        for menu_data in data:
+            # Filter for the current location
+            if int(menu_data["location_id"]) != HARD_CODED_LOCATION_ID:
+                continue
+
+            # Fetch the recipe if it exists already in the sesh
+            recipe = session.get(Recipes, menu_data["recipe_id"])
+            if recipe is None:
+                continue
+
+            # Check if the menu item already exists
+            existing_menu_item = session.exec(
+                select(LocationsRecipes).where(
+                    LocationsRecipes.location_id == HARD_CODED_LOCATION_ID,
+                    LocationsRecipes.recipe_id == recipe.id,
+                )
+            ).first()
+
+            if existing_menu_item:
+                continue
+
+            # If no existing menu item, create a new one
+            menu_item = LocationsRecipes(
+                location_id=HARD_CODED_LOCATION_ID,
+                recipe_id=recipe.id,
+                price=parse_cost_to_cents(menu_data["price"]),
+                # Lets leave modifiers til V2...
+                # I'm aliasing modifiers to separate allergens from recipe extras
+                allow_modifiers=False,  # menu_data["modifiers"] == "1",
+                allow_allergens=False,  # menu_data["modifiers"] == "2",
+            )
+            session.add(menu_item)
+
+        session.commit()
+        return "Menus seeded."
