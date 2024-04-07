@@ -41,12 +41,17 @@ def deliver(request: DeliveryRequest, session: Session = Depends(get_session)):
             print(f"Ingredient {delivery_ingredient.id} not found")
             continue
 
+        # Create the delivery ingredient relationship
         delivery_ingredient = DeliveriesIngredients(
             delivery_id=delivery.id,
             ingredient_id=ingredient.id,
             ingredient_quantity=delivery_ingredient.quantity,
         )
         session.add(delivery_ingredient)
+
+        # Update the ingredient stock
+        ingredient.units_in_stock += delivery_ingredient.ingredient_quantity
+        session.add(ingredient)
 
     session.commit()
     return {"message": "Delivery delivered. 🚚"}
