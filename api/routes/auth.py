@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from database.tables import Staff
-from database.lifespan import engine
+from database.lifespan import get_session
 from pydantic import BaseModel
 
 auth_router = APIRouter()
@@ -10,11 +10,6 @@ auth_router = APIRouter()
 class LoginRequest(BaseModel):
     email: str
     password: str
-
-
-def get_session():
-    with Session(engine) as session:
-        yield session
 
 
 @auth_router.post("/login")

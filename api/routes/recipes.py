@@ -1,20 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from database.tables import Recipes
-from database.lifespan import engine
+from database.lifespan import get_session
 
 recipes_router = APIRouter()
-
-
-def get_session():
-    """
-    Get a database session using the engine.
-
-    Returns:
-        Session: The database session.
-    """
-    with Session(engine) as session:
-        yield session
 
 
 @recipes_router.get("/")

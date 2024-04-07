@@ -1,17 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from database.tables import Staff
-from database.lifespan import engine
+from database.lifespan import get_session
 
 staff_router = APIRouter()
-
-
-def get_session():
-    """
-    Function to get a database session using the SQLModel engine.
-    """
-    with Session(engine) as session:
-        yield session
 
 
 @staff_router.get("/")

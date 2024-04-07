@@ -1,4 +1,6 @@
 from typing import List
+from sqlalchemy import DateTime
+from datetime import datetime
 from sqlmodel import Field, Relationship, SQLModel
 from constants.config import DEFAULT_STAFF_PASSWORD
 from models.units import UnitOfMeasurement
@@ -7,7 +9,8 @@ from models.units import UnitOfMeasurement
 # Junction/Link Tables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-# LocationsStaff
+# LocationsStaff -
+# We don't really need this because we're only using one location per database
 class LocationsStaff(SQLModel, table=True):
     location_id: int = Field(foreign_key="locations.id", primary_key=True)
     staff_id: int = Field(foreign_key="staff.id", primary_key=True)
@@ -34,6 +37,7 @@ class RecipesIngredients(SQLModel, table=True):
 class DeliveriesIngredients(SQLModel, table=True):
     deliveries_id: int = Field(foreign_key="deliveries.id", primary_key=True)
     ingredients_id: int = Field(foreign_key="ingredients.id", primary_key=True)
+    ingredient_quantity: float
 
 
 # Main Tables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,6 +69,7 @@ class Staff(SQLModel, table=True):
     locations: List["Locations"] = Relationship(
         back_populates="staff", link_model=LocationsStaff
     )
+    deliveries: List["Deliveries"] = Relationship(back_populates="staff")
 
 
 # Recipes
@@ -84,7 +89,7 @@ class Ingredients(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
     unit: UnitOfMeasurement
-    cost_per_unit: int  # I'm converting all monetary values to a cent based int
+    cost_per_unit: int  # I'm converting all monetary values to integers
     units_in_stock: float
     recipes: List["Recipes"] = Relationship(
         back_populates="ingredients", link_model=RecipesIngredients
@@ -95,6 +100,8 @@ class Ingredients(SQLModel, table=True):
 class Deliveries(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     name: str = Field(index=True)
+    staff: Staff = Relationship(back_populates="deliveries")
+    # datetime: DateTime = Field(default=datetime.now)
 
 
 # Orders
