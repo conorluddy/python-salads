@@ -1,38 +1,52 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session, select
-from database.tables import Ingredients
+from typing import Optional
+from fastapi import APIRouter, Depends
+from sqlmodel import Session
+from pydantic import BaseModel
+from database.tables import Deliveries, DeliveriesIngredients, Ingredients
 from database.lifespan import get_session
 
-ingredients_router = APIRouter()
+deliveries_router = APIRouter()
 
 
-@ingredients_router.get("/")
-def get_all(session: Session = Depends(get_session)):
-    """
-    Retrieve all ingredients from the database.
-
-    Returns:
-    - List of all ingredients.
-    """
-    ingredients = session.exec(select(Ingredients)).all()
-    return ingredients
+class DeliveryRequestIngredient(BaseModel):
+    id: int
+    quantity: float
 
 
-@ingredients_router.get("/{ingredient_id}")
-def get_by_id(ingredient_id: int, session: Session = Depends(get_session)):
-    """
-    Retrieve an ingredient by its ID from the database.
+class DeliveryRequest(BaseModel):
+    staff_id: int
+    name: Optional[str]
+    ingredients: list[DeliveryRequestIngredient]
 
-    Parameters:
-    - ingredient_id: The ID of the ingredient.
 
-    Returns:
-    - The ingredient with the specified ID.
+@deliveries_router.post("/")
+def deliver(request: DeliveryRequest, session: Session = Depends(get_session)):
 
-    Raises:
-    - HTTPException 404: If the ingredient is not found.
-    """
-    ingredient = session.get(Ingredients, ingredient_id)
-    if not ingredient:
-        raise HTTPException(status_code=404, detail="Ingredient not found")
-    return ingredient
+    # Create the Delivery as the base for the actual delivery ingredients
+    delivery = Deliveries(
+        staff_id=request.staff_id,
+        name=request.name,
+        ingredients=[],
+    )
+
+    # Commit the delivery so we can grab the ID
+    session.add(delivery)
+    session.commit()
+    session.refresh(delivery)
+
+    # Add each ingredient once we find them in DB first
+    for delivery_ingredient in request.ingredients:
+        ingredient = session.get(Ingredients, delivery_ingredient.id)
+        if ingredient is None:
+            print(f"Ingredient {delivery_ingredient.id} not found")
+            continue
+
+        delivery_ingredient = DeliveriesIngredients(
+            delivery_id=delivery.id,
+            ingredient_id=ingredient.id,
+            ingredient_quantity=delivery_ingredient.quantity,
+        )
+        session.add(delivery_ingredient)
+
+    session.commit()
+    return {"message": "Delivery delivered. 🚚"}

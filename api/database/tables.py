@@ -1,6 +1,4 @@
 from typing import List
-from sqlalchemy import DateTime
-from datetime import datetime
 from sqlmodel import Field, Relationship, SQLModel
 from constants.config import DEFAULT_STAFF_PASSWORD
 from models.units import UnitOfMeasurement
@@ -35,8 +33,8 @@ class RecipesIngredients(SQLModel, table=True):
 
 # DeliveriesIngredients
 class DeliveriesIngredients(SQLModel, table=True):
-    deliveries_id: int = Field(foreign_key="deliveries.id", primary_key=True)
-    ingredients_id: int = Field(foreign_key="ingredients.id", primary_key=True)
+    delivery_id: int = Field(foreign_key="deliveries.id", primary_key=True)
+    ingredient_id: int = Field(foreign_key="ingredients.id", primary_key=True)
     ingredient_quantity: float
 
 
@@ -94,14 +92,21 @@ class Ingredients(SQLModel, table=True):
     recipes: List["Recipes"] = Relationship(
         back_populates="ingredients", link_model=RecipesIngredients
     )
+    deliveries: List["Deliveries"] = Relationship(
+        back_populates="ingredients", link_model=DeliveriesIngredients
+    )
 
 
 # Deliveries
 class Deliveries(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     name: str = Field(index=True)
-    staff: Staff = Relationship(back_populates="deliveries")
     # datetime: DateTime = Field(default=datetime.now)
+    staff: Staff = Relationship(back_populates="deliveries")
+    staff_id: int = Field(default=None, foreign_key="staff.id")
+    ingredients: List["Ingredients"] = Relationship(
+        back_populates="deliveries", link_model=DeliveriesIngredients
+    )
 
 
 # Orders
