@@ -7,18 +7,39 @@ staff_router = APIRouter()
 
 
 def get_session():
+    """
+    Function to get a database session using the SQLModel engine.
+    """
     with Session(engine) as session:
         yield session
 
 
 @staff_router.get("/")
 def get_all(session: Session = Depends(get_session)):
+    """
+    Endpoint to get all staff members.
+
+    Returns:
+        List[Staff]: A list of all staff members.
+    """
     staff = session.exec(select(Staff)).all()
     return staff
 
 
 @staff_router.get("/{staff_id}")
 def get_by_id(staff_id: int, session: Session = Depends(get_session)):
+    """
+    Endpoint to get a staff member by their ID.
+
+    Args:
+        staff_id (int): The ID of the staff member.
+
+    Returns:
+        Staff: The staff member with the specified ID.
+
+    Raises:
+        HTTPException: If the staff member is not found.
+    """
     staff = session.get(Staff, staff_id)
     if not staff:
         raise HTTPException(status_code=404, detail="Staff not found")

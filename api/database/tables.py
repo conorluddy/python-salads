@@ -1,6 +1,6 @@
 from typing import List
 from sqlmodel import Field, Relationship, SQLModel
-from constants.config import DEFAULT_PASSWORD
+from constants.config import DEFAULT_STAFF_PASSWORD
 from models.units import UnitOfMeasurement
 
 
@@ -60,7 +60,7 @@ class Staff(SQLModel, table=True):
     iban: str
     bic: str
     email: str
-    password: str = DEFAULT_PASSWORD
+    password: str = DEFAULT_STAFF_PASSWORD
     role: str  # TODO: Use the role enum here
     locations: List["Locations"] = Relationship(
         back_populates="staff", link_model=LocationsStaff
