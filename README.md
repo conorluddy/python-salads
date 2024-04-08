@@ -29,7 +29,7 @@ But I learned a lot in building this out, so thank you for the opportunity.
     - [Python](#python)
     - [FastAPI](#fastapi)
     - [SQLite](#sqlite)
-- [NextJS](#nextjs)
+    - [NextJS](#nextjs)
   - [Entity Relationships](#entity-relationships)
   - [Stuff I left out](#stuff-i-left-out)
   - [Other technical pitfalls](#other-technical-pitfalls)
@@ -213,7 +213,7 @@ SQLite is a superbly capable database solution, particularly when we're only dea
 
 In future when Weird Salads scales up, we would be able to migrate (albiet with some minor transformations), each restaurants data into a larger centralised PostgreSQL or similar system on a cloud provider. 
 
-# NextJS
+### NextJS
 
 I only had a couple of hours left to work on a front-end for this application, and Next comes with a ton of functionality out of the box, allowing me to quickly stub out some routes for the MVP version of this app. In the longer term, Next 14 now has server components, which means that you can fetch data from the server rather than the users browser, exposing less detail about your API and allowing your Next application to cache data and generate static pages for data that doesn't change very often. Many of the tables we used in this app contain data that never changes (staff, reciepes etc). Even in a real world application, much of this data would be relatively static for days and weeks at a time. Next can be leveraged in such a way that components and pages using this data can be statically generated, so the database and API doesn't even need to get hit for them. When something *does*  change in the database, you can trigger [Incremental Static Regeneration (ISR)](https://nextjs.org/docs/pages/building-your-application/data-fetching/incremental-static-regeneration) to tell Next to rebuild any static components that need to fetch updated data. 
 
