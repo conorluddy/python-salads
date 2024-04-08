@@ -1,7 +1,13 @@
 
 # Weird Salad!
 
-A technical challenge about weird salads
+A technical challenge about weird salads.
+
+*Please note*: I built the bulk of this over the day on Friday 5th April and committed [this sha](https://github.com/conorluddy/python-salads/commit/d5eacee3f113f95faf76c6b3671898a275e316c5) at 17:33 on same. I did continue to throw together some rough documentation after that deadline, and completed additional endpoints for creating Delivery and Order instances over the weekend, however I'm well aware that I was supposed to drop this at the deadline time, so feel free to ignore anything that wasn't completed by then.
+
+Although the front-end is very very bare at the moment, front-end and React is actually my strong side, so I may have wasted that by spending too much time on the back-end. There's an endless amount of additional work we could do on this, on both the back-end and the front-end, and it's quite an interesting coding challenge in that you never feel comfortable to hand it in - because it's never really complete! 
+
+But I learned a lot in building this out, so thank you for the opportunity.
 
 ## Table of Contents
 
@@ -235,7 +241,13 @@ Dates are hard. The data for the Weird Salads restaurant locations have postcode
 
 ## Future plans
 
-Things that would be nice to add to this
+Things that would be nice to add to this.
+
+- The front-end is obviously completely incomplete, so that would need priority. We should now be able to take orders and deliveries. We need some more endpoints for reporting etc.
+- Testing across frontend and backend.
+- CI/CD
+- This list could be endless :) 
+
 
 ### PWA - Progressive Web App
 
