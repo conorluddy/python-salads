@@ -29,7 +29,7 @@ class LocationsRecipes(SQLModel, table=True):
 class RecipesIngredients(SQLModel, table=True):
     recipe_id: int = Field(foreign_key="recipes.id", primary_key=True)
     ingredient_id: int = Field(foreign_key="ingredients.id", primary_key=True)
-    ingredient_quantity: float
+    ingredient_quantity: float  # How much of the ingredient is needed for the recipe
 
 
 # DeliveriesIngredients
