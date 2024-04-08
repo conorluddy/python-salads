@@ -1,4 +1,5 @@
 from typing import Optional
+from datetime import datetime
 from fastapi import APIRouter, Depends
 from sqlmodel import Session
 from pydantic import BaseModel
@@ -34,6 +35,8 @@ def deliver(request: DeliveryRequest, session: Session = Depends(get_session)):
     session.commit()
     session.refresh(delivery)
 
+    count_of_added_ingredients = 0
+
     # Add each ingredient once we find them in DB first
     for delivery_ingredient in request.ingredients:
         ingredient = session.get(Ingredients, delivery_ingredient.id)
@@ -47,11 +50,17 @@ def deliver(request: DeliveryRequest, session: Session = Depends(get_session)):
             ingredient_id=ingredient.id,
             ingredient_quantity=delivery_ingredient.quantity,
         )
-        session.add(delivery_ingredient)
 
         # Update the ingredient stock
         ingredient.units_in_stock += delivery_ingredient.ingredient_quantity
+
+        count_of_added_ingredients += 1
+
+        session.add(delivery_ingredient)
         session.add(ingredient)
+
+    if count_of_added_ingredients == 0:
+        return {"message": "No ingredients found. Delivery not created."}
 
     session.commit()
     return {"message": "Delivery delivered. 🚚"}

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 from sqlmodel import Field, Relationship, SQLModel
 from constants.config import DEFAULT_STAFF_PASSWORD
@@ -101,11 +102,15 @@ class Ingredients(SQLModel, table=True):
 class Deliveries(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     name: str = Field(index=True)
-    # datetime: DateTime = Field(default=datetime.now)
     staff: Staff = Relationship(back_populates="deliveries")
     staff_id: int = Field(default=None, foreign_key="staff.id")
     ingredients: List["Ingredients"] = Relationship(
         back_populates="deliveries", link_model=DeliveriesIngredients
+    )
+    created_at: datetime = Field(
+        default_factory=datetime.now,
+        nullable=False,
+        # TODO: Handle timezones, set in config per restaurant
     )
 
 

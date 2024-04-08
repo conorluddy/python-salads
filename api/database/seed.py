@@ -160,3 +160,6 @@ def seed_menus_from_csv():
 
         session.commit()
         return {"message": "All Menus seeded. 🌱"}
+
+
+# TODO: Seeding for deliveries, orders and adjustments, for demo/testing
