@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import SQLModel, Session, create_engine
 from constants.config import SQLITE_URL
 
 # Database Table definitions
@@ -17,7 +17,7 @@ from database.tables import (  # noqa: F401
     Deliveries,
     DeliveriesIngredients,
     Orders,
-    OrderItems,
+    OrderRecipeItem,
     OrderItemsModifiers,
     OrderItemsAllergens,
     Modifiers,
@@ -40,3 +40,11 @@ async def lifespan(app: FastAPI):
 
 
 engine = create_engine(SQLITE_URL, echo=True)  # echo is for debugging, remove for prod
+
+
+def get_session():
+    """
+    Function to create a new session with the database engine.
+    """
+    with Session(engine) as session:
+        yield session

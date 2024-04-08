@@ -5,8 +5,13 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
+interface Recipe {
+  id: number
+  name: string
+}
+
 const RecipeList = () => {
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,7 +21,7 @@ const RecipeList = () => {
         if (response.ok) {
           let data = await response.json();
           // Sort data by name
-          data = data.sort((a, b) => a.name.localeCompare(b.name));
+          data = data.sort((a: { name: string; }, b: { name: any; }) => a.name.localeCompare(b.name));
           setRecipes(data);
           setLoading(false);
         } else {

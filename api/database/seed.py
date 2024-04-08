@@ -33,7 +33,7 @@ def seed_locations_from_csv():
             location = Locations(**location_data)
             session.add(location)
         session.commit()
-        return "Locations seeded."  # TODO: Return the number of locations seeded
+        return {"message": "All Locations seeded. 🌱"}  # TODO: Return the count
 
 
 def seed_staff_from_csv():
@@ -63,7 +63,7 @@ def seed_staff_from_csv():
             session.add(staff)
 
         session.commit()
-        return "Staff seeded."  # TODO: give more info on the number of staff seeded
+        return {"message": "All Staff seeded. 🌱"}  # TODO: give more info
 
 
 def seed_ingredients_from_csv():
@@ -91,7 +91,7 @@ def seed_ingredients_from_csv():
             session.add(ingredient)
 
         session.commit()
-        return "Ingredients seeded."
+        return {"message": "All Ingredients seeded. 🌱"}
 
 
 def seed_recipes_from_csv():
@@ -119,7 +119,7 @@ def seed_recipes_from_csv():
             session.add(recipe_ingredient)
 
         session.commit()
-        return "Recipes seeded."
+        return {"message": "All Recipes seeded. 🌱"}
 
 
 def seed_menus_from_csv():
@@ -159,4 +159,7 @@ def seed_menus_from_csv():
             session.add(menu_item)
 
         session.commit()
-        return "Menus seeded."
+        return {"message": "All Menus seeded. 🌱"}
+
+
+# TODO: Seeding for deliveries, orders and adjustments, for demo/testing
