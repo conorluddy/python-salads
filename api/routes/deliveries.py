@@ -1,5 +1,4 @@
 from typing import Optional
-from datetime import datetime
 from fastapi import APIRouter, Depends
 from sqlmodel import Session
 from pydantic import BaseModel
@@ -21,7 +20,7 @@ class DeliveryRequest(BaseModel):
 
 
 @deliveries_router.post("/")
-def deliver(request: DeliveryRequest, session: Session = Depends(get_session)):
+def create_delivery(request: DeliveryRequest, session: Session = Depends(get_session)):
 
     # Create the Delivery as the base for the actual delivery ingredients
     delivery = Deliveries(
@@ -29,6 +28,8 @@ def deliver(request: DeliveryRequest, session: Session = Depends(get_session)):
         name=request.name,
         ingredients=[],
     )
+
+    # TODO: Should check that the staff actually exists here too
 
     # Commit the delivery so we can grab the ID
     session.add(delivery)

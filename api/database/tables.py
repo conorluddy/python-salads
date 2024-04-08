@@ -69,6 +69,7 @@ class Staff(SQLModel, table=True):
         back_populates="staff", link_model=LocationsStaff
     )
     deliveries: List["Deliveries"] = Relationship(back_populates="staff")
+    orders: List["Orders"] = Relationship(back_populates="staff")
 
 
 # Recipes
@@ -116,12 +117,29 @@ class Deliveries(SQLModel, table=True):
 
 # Orders
 class Orders(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+    id: int = Field(default=None, primary_key=True)
+    name: str = Field(index=True)  # Placeholder for maybe a customer name
+    staff: Staff = Relationship(back_populates="orders")
+    staff_id: int = Field(default=None, foreign_key="staff.id")
+    created_at: datetime = Field(
+        default_factory=datetime.now,
+        nullable=False,
+        # TODO: Handle timezones, set in config per restaurant
+    )
 
 
-# OrderItems
-class OrderItems(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+# OrderRecipeItem
+# One row per recipe in an order
+class OrderRecipeItem(SQLModel, table=True):
+    order_id: int = Field(foreign_key="orders.id", primary_key=True)
+    recipe_id: int = Field(foreign_key="recipes.id", primary_key=True)
+    order_recipe_index: int = Field(default=None, primary_key=True)
+    # allergens: List["Allergens"] = Relationship(
+    #     back_populates="order_recipe_items", link_model=OrderItemsAllergens
+    # )
+    # modifiers: List["Modifiers"] = Relationship(
+    #     back_populates="order_recipe_items", link_model=OrderItemsModifiers
+    # )
 
 
 # OrderItemsModifiers

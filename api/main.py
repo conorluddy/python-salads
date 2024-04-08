@@ -11,6 +11,7 @@ from routes.seed import seed_router
 from routes.staff import staff_router
 from routes.auth import auth_router
 from routes.deliveries import deliveries_router
+from routes.orders import orders_router
 
 
 # API Server:  Run with `uvicorn main:app --reload`
@@ -29,6 +30,7 @@ app.add_middleware(
 
 # Routers - Splitting these into their own modules for better organisation
 app.include_router(deliveries_router, prefix="/delivery", tags=["Deliveries"])
+app.include_router(orders_router, prefix="/order", tags=["Orders"])
 app.include_router(locations_router, prefix="/locations", tags=["Locations"])
 app.include_router(staff_router, prefix="/staff", tags=["Staff"])
 app.include_router(menus_router, prefix="/menus", tags=["Menus"])

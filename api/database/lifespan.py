@@ -17,7 +17,7 @@ from database.tables import (  # noqa: F401
     Deliveries,
     DeliveriesIngredients,
     Orders,
-    OrderItems,
+    OrderRecipeItem,
     OrderItemsModifiers,
     OrderItemsAllergens,
     Modifiers,
