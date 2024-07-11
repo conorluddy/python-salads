@@ -6,6 +6,11 @@ import useRequireAuth from "@/hooks/useAuth";
 import NavigationMenu from "@/components/ui/navigation-menu";
 import { useEffect, useState } from "react";
 
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { fetchLocations } from "@/hooks/queries/useLocations";
+import ky from "ky";
+import { API_BASE_URL } from "@/constants";
+
 export default function Dashboard() {
   useRequireAuth();
 
@@ -15,6 +20,8 @@ export default function Dashboard() {
   useEffect(() => {
     const userData = sessionStorage.getItem("staff");
     if (userData) setUserName(JSON.parse(userData).name);
+
+    getLocations();
   }, []);
 
   return (
@@ -32,4 +39,10 @@ export default function Dashboard() {
       <NavigationMenu />
     </main>
   );
+}
+
+async function getLocations() {
+  const locations: unknown[] = await ky(API_BASE_URL + "/locations").json();
+  console.log("locations", locations);
+  return locations;
 }
